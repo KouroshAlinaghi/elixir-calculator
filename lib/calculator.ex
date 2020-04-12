@@ -10,10 +10,6 @@ defmodule Calculator do
   """
 
   def mir_sli(list, at, l \\ 0, r \\ 0) do
-#    IO.inspect "list: #{list}"
-#    IO.inspect "at: #{at}"
-#    IO.inspect "left: #{l}"
-#    IO.inspect "right: #{r}"
     if l == r && r != 0 do
       at
     else
@@ -27,7 +23,7 @@ defmodule Calculator do
 
   def remove_pr(list, i) do
     mir = mir_sli(list, i)
-    new_list = List.delete_at(list, i) |> List.delete_at(mir - 2)
+    List.delete_at(list, i) |> List.delete_at(mir - 2)
   end
 
   def to_expression(list) do
@@ -37,9 +33,6 @@ defmodule Calculator do
   def do_expression(list) when length(list) == 1, do: list
 
   def do_expression(list) do
-    IO.puts("++++++++++")
-    IO.inspect(list)
-    IO.puts("++++++++++")
 
     cond do
       Enum.find_index(list, fn x -> x == "(" end) != nil ->
@@ -116,16 +109,53 @@ defmodule Calculator do
     do_convert(String.split(no_white_spaces, "", trim: true), 0, String.length(no_white_spaces))
   end
 
+  def is_pr?(token), do: token == "(" || token == ")"
+
+  def allow_negative(list, 0) do
+    cur = Enum.at(list, 0) 
+    nex = Enum.at(list, 1) 
+    nexnex = Enum.at(list, 2) 
+    cond do
+      cur == "-" && is_numeric?(nex) -> 
+        allow_negative(List.update_at(list, 0, fn _x -> cur <> nex end) |> List.delete_at(1), 1)
+      cur == "(" && nex == "-" && is_numeric?(nexnex) ->
+        allow_negative(List.update_at(list, 1, fn _x -> nex <> nexnex end) |> List.delete_at(2), 1)
+      cur != "-" ->
+        allow_negative(list, 1)
+    end
+  end
+
+  def allow_negative(list, i) do
+    if i == length(list) do
+      to_expression(list)
+    else
+      pre = Enum.at(list, i-1) 
+      cur = Enum.at(list, i) 
+      nex = Enum.at(list, i+1) 
+      if cur == "-" && is_numeric?(nex) && is_operator?(pre) do
+        allow_negative(List.update_at(list, i, fn _x -> cur <> nex end) |> List.delete_at(i+1), i+1)
+      else 
+        allow_negative(list, i+1)
+      end
+    end
+  end
+
+  def is_operator?(pre), do: Enum.member?(["+", "-", "^", "/", "*"], pre)
+
   defp do_convert(exp, i, exp_length) when i == exp_length - 1 do
-    to_expression(exp)
+    if Enum.member?(exp, "-") do
+      allow_negative(exp, 0)
+    else
+      to_expression(exp)
+    end
   end
 
   defp do_convert(exp, i, _exp_length) do
-    cur = Enum.at(exp, i)
-    nex = Enum.at(exp, i + 1)
+    cur = Enum.at(exp, i) 
+    nex = Enum.at(exp, i + 1) 
 
     cond do
-      are_numbers?(cur, nex) ->
+      are_numbers?(String.last(cur), nex) ->
         new_exp = List.update_at(exp, i + 1, fn _x -> cur <> nex end) |> List.delete_at(i)
         do_convert(new_exp, i, length(new_exp))
 
@@ -136,18 +166,18 @@ defmodule Calculator do
 
   defp is_special_operator?(operator), do: Enum.member?(["*", "/", "(", ")"], operator)
 
-  defp is_numeric?(str) do
+  def is_numeric?(str) do
     if str == "." do
       true
     else
-      case Integer.parse(str) do
+      case Float.parse(str) do
         {_num, ""} -> true
         _ -> false
       end
     end
   end
 
-  defp are_numbers?(a, b) do
+  def are_numbers?(a, b) do
     if is_numeric?(a) && is_numeric?(b) do
       true
     else
@@ -156,4 +186,4 @@ defmodule Calculator do
   end
 end
 
-Calculator.convert("(2*2322+23)+3") |> IO.inspect
+Calculator.convert("7+3*-2+3*(3-2*-2)") |> IO.inspect
