@@ -9,6 +9,23 @@ defmodule Calculator do
 
   """
 
+  def mir_sli(list, at, l \\ 0, r \\ 0) do
+    if l == r && r != 0 do
+      at
+    else
+      case Enum.at(list, at) do
+        "(" -> mir_sli(list, at+1, l+1, r)
+        ")" -> mir_sli(list, at+1, l, r+1)
+        _   -> mir_sli(list, at+1, l, r)
+      end
+    end
+  end
+
+  def remove_pr(list, i) do
+    mir = mir_sli(list, i)
+    new_list = List.delete_at(list, i) |> List.delete_at(mir-2)
+  end
+  
   def to_expression(list) do
     do_expression(list)
   end
@@ -16,9 +33,18 @@ defmodule Calculator do
   def do_expression(list) when length(list) == 1, do: list
 
   def do_expression(list) do
-    IO.inspect(list)
+  IO.puts "++++++++++"
+  IO.inspect(list)
+  IO.puts "++++++++++"
 
     cond do
+
+      Enum.find_index(list, fn x -> x == "(" end) != nil ->
+        i = Enum.find_index(list, fn x -> x == "(" end) |> IO.inspect
+        new_list = Enum.slice(list, i, length(list)) |> remove_pr(0) |> IO.inspect
+        res = do_expression(new_list)
+        do_expression(Enum.slice(list, 0, i)++res)
+
       Enum.find_index(list, fn x -> x == "^" end) != nil ->
         i = Enum.find_index(list, fn x -> x == "^" end)
         oper = Enum.at(list, i)
@@ -123,5 +149,3 @@ defmodule Calculator do
   end
 end
 
-#str = "7.22+2"
-#Calculator.convert(str) |> IO.inspect()
