@@ -26,10 +26,6 @@ defmodule Calculator do
     List.delete_at(list, i) |> List.delete_at(mir - 2)
   end
 
-  def to_expression(list) do
-    do_expression(list)
-  end
-
   def do_expression(list) when length(list) == 1, do: list
 
   def do_expression(list) do
@@ -87,8 +83,7 @@ defmodule Calculator do
     else
       case Float.parse(str) do
         {num, ""} -> num
-        # undefined number
-        _ -> false
+        _ -> raise "Invalid Token: #{str}"
       end
     end
   end
@@ -122,12 +117,13 @@ defmodule Calculator do
         allow_negative(List.update_at(list, 1, fn _x -> nex <> nexnex end) |> List.delete_at(2), 1)
       cur != "-" ->
         allow_negative(list, 1)
+      true -> raise "Please Enter Valid Expression"
     end
   end
 
   def allow_negative(list, i) do
     if i == length(list) do
-      to_expression(list)
+      do_expression(list)
     else
       pre = Enum.at(list, i-1) 
       cur = Enum.at(list, i) 
@@ -146,7 +142,7 @@ defmodule Calculator do
     if Enum.member?(exp, "-") do
       allow_negative(exp, 0)
     else
-      to_expression(exp)
+      do_expression(exp)
     end
   end
 
@@ -186,4 +182,4 @@ defmodule Calculator do
   end
 end
 
-Calculator.convert("7+3*-2+3*(3-2*-2)") |> IO.inspect
+Calculator.convert("7+3*-2+3*(3-2*-292)") |> IO.inspect
