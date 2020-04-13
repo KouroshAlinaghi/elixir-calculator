@@ -6,11 +6,15 @@ defmodule Calcualtor.Calculate do
 
   def do_expression(list) do
 
+    IO.inspect "-------"
+    IO.inspect(list)
+    IO.inspect "-------"
+
     cond do
       Enum.find_index(list, fn x -> x == "(" end) != nil ->
-        i = Enum.find_index(list, fn x -> x == "(" end) 
-        l = find_close_parentheses(list, 0)
-        new_exp = Enum.slice(list, i, l) |> remove_parentheses(0) 
+      i = Enum.find_index(list, fn x -> x == "(" end)  |> IO.inspect
+      l = find_close_parentheses(list, 0) |> IO.inspect
+        new_exp = Enum.slice(list, i, l-i) |> remove_parentheses(0) 
         res = do_expression(new_exp) 
         pre = Enum.take(list, i) 
         next = Enum.take(list, l-length(list)) 

@@ -5,15 +5,15 @@ defmodule Calculator.Helper do
       at
     else
       case Enum.at(list, at) do
-        "(" -> mir_sli(list, at + 1, l + 1, r)
-        ")" -> mir_sli(list, at + 1, l, r + 1)
-        _ -> mir_sli(list, at + 1, l, r)
+        "(" -> find_close_parentheses(list, at + 1, l + 1, r)
+        ")" -> find_close_parentheses(list, at + 1, l, r + 1)
+        _ -> find_close_parentheses(list, at + 1, l, r)
       end
     end
   end
 
   def remove_parentheses(list, i) do
-    mir = mir_sli(list, i)
+    mir = find_close_parentheses(list, i)
     List.delete_at(list, i) |> List.delete_at(mir - 2)
   end
 

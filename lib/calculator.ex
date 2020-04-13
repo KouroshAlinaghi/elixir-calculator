@@ -19,4 +19,5 @@ defmodule Calculator do
 
 end
 
-Calculator.calculate("7+3*-2+3*(3-2*-292)") |> IO.inspect
+str = "2+3*(-2/1)/2"
+Calculator.calculate(str) |> IO.inspect
