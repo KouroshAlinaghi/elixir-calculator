@@ -1,24 +1,18 @@
-defmodule Calcualtor.Calculate do
-
+defmodule Calculator.Calculate do
   import Calculator.Helper
 
   def do_expression(list) when length(list) == 1, do: list
 
   def do_expression(list) do
-
-    IO.inspect "-------"
-    IO.inspect(list)
-    IO.inspect "-------"
-
     cond do
       Enum.find_index(list, fn x -> x == "(" end) != nil ->
-      i = Enum.find_index(list, fn x -> x == "(" end)  |> IO.inspect
-      l = find_close_parentheses(list, 0) |> IO.inspect
-        new_exp = Enum.slice(list, i, l-i) |> remove_parentheses(0) 
-        res = do_expression(new_exp) 
-        pre = Enum.take(list, i) 
-        next = Enum.take(list, l-length(list)) 
-        do_expression(pre++res++next)
+        i = Enum.find_index(list, fn x -> x == "(" end)
+        l = find_close_parentheses(list, 0)
+        new_exp = Enum.slice(list, i, l - i) |> remove_parentheses
+        res = do_expression(new_exp)
+        pre = Enum.take(list, i)
+        next = Enum.take(list, l - length(list))
+        do_expression(pre ++ res ++ next)
 
       Enum.find_index(list, fn x -> x == "^" end) != nil ->
         i = Enum.find_index(list, fn x -> x == "^" end)
@@ -60,6 +54,7 @@ defmodule Calcualtor.Calculate do
   def calc(l, o, r) do
     left_number = to_number(l)
     right_number = to_number(r)
+
     case o do
       "+" -> left_number + right_number
       "-" -> left_number - right_number
@@ -69,5 +64,4 @@ defmodule Calcualtor.Calculate do
       _ -> nil
     end
   end
-
 end

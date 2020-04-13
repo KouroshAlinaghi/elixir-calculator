@@ -1,5 +1,4 @@
 defmodule Calculator do
-  
   @moduledoc """
   Documentation for `Calculator`.
   """
@@ -16,8 +15,5 @@ defmodule Calculator do
     no_white_spaces = expression |> String.replace(" ", "")
     do_convert(String.split(no_white_spaces, "", trim: true), 0, String.length(no_white_spaces))
   end
-
 end
 
-str = "2+3*(-2/1)/2"
-Calculator.calculate(str) |> IO.inspect

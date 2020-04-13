@@ -1,5 +1,4 @@
 defmodule Calculator.Helper do
-
   def find_close_parentheses(list, at, l \\ 0, r \\ 0) do
     if l == r && r != 0 do
       at
@@ -12,9 +11,8 @@ defmodule Calculator.Helper do
     end
   end
 
-  def remove_parentheses(list, i) do
-    mir = find_close_parentheses(list, i)
-    List.delete_at(list, i) |> List.delete_at(mir - 2)
+  def remove_parentheses(list) do
+    List.delete_at(list, 0) |> List.delete_at(length(list) - 2)
   end
 
   def to_number(str) do
@@ -52,6 +50,4 @@ defmodule Calculator.Helper do
       false
     end
   end
-
 end
-
