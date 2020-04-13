@@ -1,14 +1,7 @@
 defmodule Calculator do
   @moduledoc """
-  Documentation for `Calculator`.
+  A Simple Calculator, as My First Elixir Project!
   """
-
-  @doc """
-
-  ## Examples
-
-  """
-
   import Calculator.Parser
 
   def calculate(expression) do
@@ -17,12 +10,11 @@ defmodule Calculator do
   end
 
   def get_input() do
-    input = IO.gets("calc> ") 
-    List.first(calculate(String.trim(input))) |> IO.puts
+    input = IO.gets("calc> ")
+    List.first(calculate(String.trim(input))) |> IO.puts()
     get_input()
   end
-
 end
 
-IO.puts "Hello, Welcome To My Simple Calculator!"
-Calculator.get_input
+IO.puts("Hello, Welcome To My Simple Calculator!")
+Calculator.get_input()
