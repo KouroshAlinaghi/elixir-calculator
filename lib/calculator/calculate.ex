@@ -7,7 +7,7 @@ defmodule Calculator.Calculate do
     cond do
       Enum.find_index(list, fn x -> x == "(" end) != nil ->
         i = Enum.find_index(list, fn x -> x == "(" end)
-        l = find_close_parentheses(list, 0)
+        l = find_close_parentheses(list, 0, 0, 0)
         new_exp = Enum.slice(list, i, l - i) |> remove_parentheses
         res = do_expression(new_exp)
         pre = Enum.take(list, i)

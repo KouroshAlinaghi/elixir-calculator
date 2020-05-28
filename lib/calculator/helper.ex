@@ -1,45 +1,39 @@
 defmodule Calculator.Helper do
-  def find_close_parentheses(list, at, l \\ 0, r \\ 0) do
-    if l == r && r != 0 do
-      at
-    else
-      case Enum.at(list, at) do
-        "(" -> find_close_parentheses(list, at + 1, l + 1, r)
-        ")" -> find_close_parentheses(list, at + 1, l, r + 1)
-        _ -> find_close_parentheses(list, at + 1, l, r)
-      end
+
+  def find_close_parentheses(_list, at, l, r) when l == r and r != 0, do: at
+  def find_close_parentheses(list, at, _l, _r) when at == length(list), do: raise "parenthesis are not balanced"
+  def find_close_parentheses(list, at, l, r) do
+    case Enum.at(list, at) do
+      "(" -> find_close_parentheses(list, at + 1, l + 1, r)
+      ")" -> find_close_parentheses(list, at + 1, l, r + 1)
+      _ -> find_close_parentheses(list, at + 1, l, r)
     end
   end
 
-  def remove_parentheses(list) do
-    List.delete_at(list, 0) |> List.delete_at(length(list) - 2)
-  end
+  def remove_parentheses(list), do: List.delete_at(list, 0) |> List.delete_at(length(list) - 2)
 
-  def to_number(str) do
-    if is_float(str) do
-      str
-    else
-      case Float.parse(str) do
-        {num, ""} -> num
-        _ -> raise "Invalid Token: #{str}"
-      end
+  def to_number(token) when is_float(token), do: token
+  def to_number(token) do
+    case Float.parse(token) do
+      {num, ""} -> num
+      _ -> raise "cannot parse, near: #{token}"
     end
   end
 
-  def is_parenthese?(token), do: token == "(" || token == ")"
+  def is_parenthese?(token) when token in ["(", ")"], do: true
+  def is_parenthese?(_token), do: false
 
-  def is_operator?(pre), do: Enum.member?(["+", "-", "^", "/", "*"], pre)
+  def is_operator?(token) when token in ["+", "-", "^", "/", "*"], do: true
+  def is_operator?(_token), do: false
 
-  def is_special_operator?(operator), do: Enum.member?(["*", "/", "(", ")"], operator)
+  def is_special_operator?(operator) when operator in ["*", "/", "(", ")"], do: true
+  def is_special_operator?(_operator), do: false
 
+  def is_numeric?("."), do: true
   def is_numeric?(str) do
-    if str == "." do
-      true
-    else
-      case Float.parse(str) do
-        {_num, ""} -> true
-        _ -> false
-      end
+    case Float.parse(str) do
+      {_num, ""} -> true
+      _ -> false
     end
   end
 
