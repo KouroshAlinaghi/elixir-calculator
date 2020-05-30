@@ -56,5 +56,5 @@ defmodule Calculator do
   end
 end
 
-#IO.puts("Hello, Welcome To My Simple Calculator!")
-#Calculator.main() 
+IO.puts("Hello, Welcome To My Simple Calculator!")
+Calculator.main() 
