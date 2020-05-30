@@ -15,7 +15,7 @@ end
 
 ## Usage
 
-Run `mix run`:
+Run `mix`:
 
 ```
 ➜ mix run
