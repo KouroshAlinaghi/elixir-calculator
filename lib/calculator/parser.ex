@@ -1,5 +1,4 @@
 defmodule Calculator.Parser do
-  import Calculator.Calculate
   import Calculator.Helper
 
   def do_convert(exp, i) when i == length(exp) - 1, do: exp

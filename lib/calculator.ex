@@ -13,13 +13,6 @@ defmodule Calculator do
 
   def remove_last_index(list), do: List.delete_at(list, length(list)-1)
 
-  def main() do
-    IO.gets("calc> ")
-    |> calculate()
-    |> IO.inspect
-    main()
-  end
-
   def convert_str_to_num(list, i) when i == length(list), do: list
   def convert_str_to_num(list, i) do
     if is_operator?(Enum.at(list, i)) || is_parenthese?(Enum.at(list, i)) do
@@ -43,6 +36,13 @@ defmodule Calculator do
 
   def get_answer([answer]), do: answer
 
+  def main() do
+    IO.gets("calc> ")
+    |> calculate()
+    |> IO.inspect
+    main()
+  end
+
   def calculate(expression) do
     expression
     |> convert_to_list()
@@ -56,5 +56,5 @@ defmodule Calculator do
   end
 end
 
-IO.puts("Hello, Welcome To My Simple Calculator!")
-Calculator.main() 
+#IO.puts("Hello, Welcome To My Simple Calculator!")
+#Calculator.main() 
