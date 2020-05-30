@@ -18,7 +18,7 @@ end
 Run `mix`:
 
 ```
-➜ mix run
+➜ mix
 Compiling 4 files (.ex)
 Hello, Welcome To My Simple Calculator!
 calc> 2.5*3
