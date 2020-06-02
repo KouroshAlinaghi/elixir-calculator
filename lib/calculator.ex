@@ -43,6 +43,21 @@ defmodule Calculator do
     main()
   end
 
+  def bruh(list, i) when i == length(list), do: list
+  def bruh(list, i) do
+    if Enum.at(list, i) == "(" do
+      p = Enum.take(list, i) 
+      c = Enum.slice(list, i+1..find_close_parentheses(list, i, 0, 0)-2) 
+      n = Enum.take(list, find_close_parentheses(list, i, 0, 0)-length(list)) 
+      bruh(
+        p++[bruh(c,0)]++n,
+        i+1
+      )
+    else
+      bruh(list, i+1)
+    end
+  end
+
   def calculate(expression) do
     expression
     |> convert_to_list()
@@ -51,6 +66,7 @@ defmodule Calculator do
     |> merge_negative_with_numbers(0)
     |> convert_str_to_num(0)
     |> add_multiple(0)
+    |> bruh(0)
     |> calculate_expression()
     |> get_answer()
   end

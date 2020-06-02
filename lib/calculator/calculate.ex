@@ -5,13 +5,11 @@ defmodule Calculator.Calculate do
 
   def calculate_expression(list) do
     cond do
-      Enum.find_index(list, fn x -> x == "(" end) != nil ->
-        i = Enum.find_index(list, fn x -> x == "(" end)
-        l = find_close_parentheses(list, i, 0, 0)
-        new_exp = Enum.slice(list, i, l - i) |> remove_parentheses
-        res = calculate_expression(new_exp) 
+      Enum.any?(list, fn x -> is_list(x) end) ->
+        i = Enum.find_index(list, fn x -> is_list(x) end)
+        res = calculate_expression(Enum.at(list, i)) 
         pre = Enum.take(list, i)
-        next = Enum.take(list, l - length(list))
+        next = Enum.take(list, i+1 - length(list))
         calculate_expression(pre ++ res ++ next)
 
       Enum.find_index(list, fn x -> x == "^" end) != nil ->
